@@ -1,4 +1,4 @@
-import Profile from "./Profile";
+import Profile from "./Profile/Profile";
 
 const ProfileList = ({ list }) => {
   return list.map((profile) => {
