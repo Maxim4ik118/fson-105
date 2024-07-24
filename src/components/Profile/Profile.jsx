@@ -2,7 +2,7 @@ import clsx from "clsx";
 import { RiRadioButtonLine } from "react-icons/ri";
 import { CiWifiOff } from "react-icons/ci";
 
-import iconReact from '../../assets/react.svg';
+import iconReact from "../../assets/react.svg";
 
 import css from "./Profile.module.css";
 
@@ -12,7 +12,9 @@ const Profile = ({
   email,
   status = "offline",
   hasPhisicalAddress,
+  handleClick,
 }) => {
+
   return (
     <div
       className={clsx(
@@ -27,11 +29,6 @@ const Profile = ({
       <p className={css.fieldRow}>Phone: {phone}</p>
       <p className={css.fieldRow}>Email: {email}</p>
       <p
-        // className={clsx(
-        //   css.fieldRow,
-        //   status === "online" && css.online,
-        //   status === "offline" && css.offline
-        // )}
         className={clsx(css.fieldRow, {
           [css.online]: status === "online",
           [css.offline]: status === "offline",
@@ -39,15 +36,11 @@ const Profile = ({
       >
         Status: {status === "online" ? <RiRadioButtonLine /> : <CiWifiOff />}{" "}
       </p>
+      <button type="button" onClick={() => handleClick(name)}>
+        Click to Alert
+      </button>
     </div>
   );
 };
 
 export default Profile;
-
-// <div className={clsx("profile", {
-//   "hasPhisicalAddress": hasPhisicalAddress === true
-// })}>
-// а якщо у нас умова: якщо статус онлайн то текст зеленим,
-// а якщо офлайн-червоним, то треба додавати додаткові класи
-// на статус, описати в css, а потім їх вказувати в цій умові?

@@ -1,76 +1,80 @@
+import { useState } from "react";
 import Profile from "./components/Profile/Profile";
 import Section from "./components/Section/Section";
 
-import css from "./components/Profile/Profile.module.css";
-
-import dataFromServer from './db/profiles.json'
+import dataFromServer from "./db/profiles.json";
+import Bar from "./components/Bar/Bar";
 
 function App() {
+  const [showUserList, setShowUserList] = useState(false);
+  const [bottles, setBottles] = useState({
+    beer: 2,
+    wine: 3,
+    whiskey: 1,
+  });
+
+  const handleClick = (userName) => {
+    console.log("name: ", userName);
+  };
+
+  const toggleUserList = () => {
+    setShowUserList(!showUserList);
+  };
+
+  const onBarSupplyAdd = (alcoName) => {
+    console.log("click", alcoName);
+    // alcoName -> "beer"
+  
+    setBottles({ ...bottles, [alcoName]: bottles[alcoName] + 1 });
+    // setBottles((state) => ({ ...state, [alcoName]: state[alcoName] + 1 }));
+
+    // if (alcoName === "beer") {
+    //   setBottles({ ...bottles, beer: bottles["beer"] + 1 });
+    //   // { beer: 2, wine: 3, whiskey: 1}; -> { beer: 2, wine: 3, whiskey: 1, beer: 2 + 1   }
+    //   // -> { wine: 3, whiskey: 1, beer: 3 }
+    // }
+    // if (alcoName === "wine") {
+    //   setBottles({ ...bottles, wine: bottles["wine"] + 1 });
+    // }
+    // if (alcoName === "whiskey") {
+    //   setBottles({ ...bottles, whiskey: bottles["whiskey"] + 1 });
+    // }
+  };
+
+  const total = bottles.beer + bottles.wine + bottles.whiskey;
   return (
     <div>
-      <p className={css.fieldRow}>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum suscipit
-        sint sed ullam quod, pariatur unde vero quia commodi minima.
-      </p>
-
-      <Section title="Profile list">
-        <Profile
-          name="Max"
-          phone="123456789"
-          email="0i5k0@example.com"
-          status="online"
-          hasPhisicalAddress={false}
-        />
-        <Profile
-          name="Max"
-          phone="123456789"
-          email="0i5k0@example.com"
-          status="online"
-          hasPhisicalAddress={false}
-        />
-        <Profile
-          name="Max"
-          phone="123456789"
-          email="0i5k0@example.com"
-          status="online"
-          hasPhisicalAddress={false}
+      <Section title="FSON105 weekend bar">
+        <Bar
+          beer={bottles.beer}
+          wine={bottles.wine}
+          whiskey={bottles.whiskey}
+          total={total}
+          onBarSupplyAdd={onBarSupplyAdd}
         />
       </Section>
-
       <Section>
-        <p>
-          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quaerat
-          atque unde omnis officia debitis. Eaque impedit quis, quos nobis
-          officia, debitis ab beatae a, consequatur voluptate animi quia illum
-          alias. Reiciendis, sed nesciunt voluptatem officiis obcaecati deserunt
-          nobis velit voluptas numquam reprehenderit! Impedit quo labore, esse
-          doloremque odio suscipit delectus.
-        </p>
-        <button>Lorem, ipsum.</button>
+        <button type="button" onClick={toggleUserList}>
+          Toggle User List
+        </button>
+        {showUserList && (
+          <div>
+            {dataFromServer.map((profile) => {
+              return (
+                <Profile
+                  key={profile.email} // id
+                  name={profile.name}
+                  phone={profile.phone}
+                  email={profile.email}
+                  status={profile.status}
+                  hasPhisicalAddress={profile.hasPhisicalAddress}
+                  handleClick={handleClick}
+                />
+              );
+            })}
+          </div>
+        )}
       </Section>
-
-      <Section>
-        {dataFromServer.map((profile) => {
-          return (
-            <Profile
-              key={profile.email} // id
-              name={profile.name}
-              phone={profile.phone}
-              email={profile.email}
-              status={profile.status}
-              hasPhisicalAddress={profile.hasPhisicalAddress}
-            />
-          );
-        })}
-      </Section>
-
-      {/* <Profile
-        name="Max"
-        phone="123456789"
-        email="0i5k0@example.com"
-        status="online"
-        hasPhisicalAddress={false}
-      /> */}
     </div>
   );
 }
