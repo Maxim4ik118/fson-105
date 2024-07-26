@@ -1,12 +1,15 @@
 import { useState } from "react";
+
 import Profile from "./components/Profile/Profile";
 import Section from "./components/Section/Section";
+import Bar from "./components/Bar/Bar";
+import Modal from "./components/Modal/Modal";
 
 import dataFromServer from "./db/profiles.json";
-import Bar from "./components/Bar/Bar";
 
 function App() {
   const [showUserList, setShowUserList] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [bottles, setBottles] = useState({
     beer: 2,
     wine: 3,
@@ -22,26 +25,19 @@ function App() {
   };
 
   const onBarSupplyAdd = (alcoName) => {
-    console.log("click", alcoName);
-    // alcoName -> "beer"
-  
     setBottles({ ...bottles, [alcoName]: bottles[alcoName] + 1 });
-    // setBottles((state) => ({ ...state, [alcoName]: state[alcoName] + 1 }));
+  };
 
-    // if (alcoName === "beer") {
-    //   setBottles({ ...bottles, beer: bottles["beer"] + 1 });
-    //   // { beer: 2, wine: 3, whiskey: 1}; -> { beer: 2, wine: 3, whiskey: 1, beer: 2 + 1   }
-    //   // -> { wine: 3, whiskey: 1, beer: 3 }
-    // }
-    // if (alcoName === "wine") {
-    //   setBottles({ ...bottles, wine: bottles["wine"] + 1 });
-    // }
-    // if (alcoName === "whiskey") {
-    //   setBottles({ ...bottles, whiskey: bottles["whiskey"] + 1 });
-    // }
+  const onOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const onCloseModal = () => {
+    setIsModalOpen(false);
   };
 
   const total = bottles.beer + bottles.wine + bottles.whiskey;
+
   return (
     <div>
       <Section title="FSON105 weekend bar">
@@ -52,6 +48,12 @@ function App() {
           total={total}
           onBarSupplyAdd={onBarSupplyAdd}
         />
+      </Section>
+      <Section title="Modal">
+        <button onClick={onOpenModal} type="button">
+          Open Modal
+        </button>
+        {isModalOpen && <Modal onCloseModal={onCloseModal} />}
       </Section>
       <Section>
         <button type="button" onClick={toggleUserList}>
