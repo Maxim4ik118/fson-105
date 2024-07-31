@@ -1,82 +1,93 @@
 import { useState } from "react";
+import { nanoid } from "nanoid";
 
 import Profile from "./components/Profile/Profile";
-import Section from "./components/Section/Section";
-import Bar from "./components/Bar/Bar";
-import Modal from "./components/Modal/Modal";
 
 import dataFromServer from "./db/profiles.json";
+import Section from "./components/Section/Section";
+import AddProfileForm from "./components/AddProfileForm/AddProfileForm";
 
 function App() {
-  const [showUserList, setShowUserList] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [bottles, setBottles] = useState({
-    beer: 2,
-    wine: 3,
-    whiskey: 1,
-  });
+  const [showUserList, setShowUserList] = useState(true);
+  const [users, setUsers] = useState(dataFromServer); // [{...}, {...}]
+  const [filterValue, setFilterValue] = useState("");
 
   const handleClick = (userName) => {
     console.log("name: ", userName);
+  };
+
+  const onAddProfile = (profile) => {
+    const finalProfile = {
+      ...profile,
+      id: nanoid(),
+    };
+
+    setUsers([finalProfile, ...users]);
+  };
+
+  const onDeleteProfile = (profileId) => {
+    // [{ id: "1" }, { id: "2" }, { id: "3" }]
+    // [{ id: "1" }] -> "1" !== "3" -> true
+    // [{ id: "1" }, { id: "2" }] -> "2" !== "3" -> true
+    // [{ id: "1" }, { id: "2" }] -> "3" !== "3" -> false
+    // item.id !== profileId
+
+    setUsers(users.filter((item) => item.id !== profileId));
+  };
+
+  const handleFilter = (event) => {
+    const value = event.target.value;
+
+    setFilterValue(value);
   };
 
   const toggleUserList = () => {
     setShowUserList(!showUserList);
   };
 
-  const onBarSupplyAdd = (alcoName) => {
-    setBottles({ ...bottles, [alcoName]: bottles[alcoName] + 1 });
-  };
-
-  const onOpenModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const onCloseModal = () => {
-    setIsModalOpen(false);
-  };
-
-  const total = bottles.beer + bottles.wine + bottles.whiskey;
+  const filteredProfiles = users.filter((profile) =>
+    profile.name.toLowerCase().includes(filterValue.toLowerCase())
+  );
 
   return (
     <div>
-      <Section title="FSON105 weekend bar">
-        <Bar
-          beer={bottles.beer}
-          wine={bottles.wine}
-          whiskey={bottles.whiskey}
-          total={total}
-          onBarSupplyAdd={onBarSupplyAdd}
-        />
-      </Section>
-      <Section title="Modal">
-        <button onClick={onOpenModal} type="button">
-          Open Modal
-        </button>
-        {isModalOpen && <Modal onCloseModal={onCloseModal} />}
-      </Section>
       <Section>
-        <button type="button" onClick={toggleUserList}>
-          Toggle User List
-        </button>
-        {showUserList && (
-          <div>
-            {dataFromServer.map((profile) => {
-              return (
-                <Profile
-                  key={profile.email} // id
-                  name={profile.name}
-                  phone={profile.phone}
-                  email={profile.email}
-                  status={profile.status}
-                  hasPhisicalAddress={profile.hasPhisicalAddress}
-                  handleClick={handleClick}
-                />
-              );
-            })}
-          </div>
-        )}
+        <AddProfileForm onAddProfile={onAddProfile} />
       </Section>
+
+      <button type="button" onClick={toggleUserList}>
+        Toggle User List
+      </button>
+
+      <div>
+        <h2>Search profile:</h2>
+        <input
+          type="text"
+          placeholder="Enter profile name"
+          value={filterValue}
+          onChange={handleFilter}
+        />
+      </div>
+
+      {showUserList && (
+        <div>
+          {filteredProfiles.map((profile) => {
+            return (
+              <Profile
+                key={profile.id}
+                id={profile.id}
+                name={profile.name}
+                phone={profile.phone}
+                email={profile.email}
+                status={profile.status}
+                hasPhisicalAddress={profile.hasPhisicalAddress}
+                onDeleteProfile={onDeleteProfile}
+                handleClick={handleClick}
+              />
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }

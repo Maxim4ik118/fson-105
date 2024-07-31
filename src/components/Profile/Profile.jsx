@@ -7,12 +7,14 @@ import iconReact from "../../assets/react.svg";
 import css from "./Profile.module.css";
 
 const Profile = ({
+  id,
   name,
   phone,
   email,
   status = "offline",
   hasPhisicalAddress,
   handleClick,
+  onDeleteProfile,
 }) => {
 
   return (
@@ -22,6 +24,7 @@ const Profile = ({
         hasPhisicalAddress && css.hasPhisicalAddress
       )}
     >
+      <button onClick={() => onDeleteProfile(id)} type="button" className={css.deleteBtn}>❌</button>
       <img src={iconReact} alt="" />
       <h2 className={css.title}>
         Name: {name} {hasPhisicalAddress ? "🏡" : ""}

@@ -1,6 +1,7 @@
 [
   {
-    "name": "Іван Петров",
+    "id": "1",
+    "name": "Іван Петров", 
     "phone": "+380501234567",
     "email": "ivan.petrov@example.com",
     "status": "online",
@@ -8,6 +9,7 @@
     "hasPhisicalAddress": false
   },
   {
+    "id": "2",
     "name": "Олена Коваль",
     "phone": "+380671234567",
     "email": "olena.koval@example.com",
@@ -16,6 +18,7 @@
     "hasPhisicalAddress": false
   },
   {
+    "id": "3",
     "name": "Максим Дмитренко",
     "phone": "+380931234567",
     "email": "maksym.dmytrenko@example.com",
@@ -24,6 +27,7 @@
     "hasPhisicalAddress": true
   },
   {
+    "id": "4",
     "name": "Анна Шевченко",
     "phone": "+380661234567",
     "email": "anna.shevchenko@example.com",
@@ -32,6 +36,7 @@
     "hasPhisicalAddress": true
   },
   {
+    "id": "5",
     "name": "Олександр Бондаренко",
     "phone": "+380991234567",
     "email": "oleksandr.bondarenko@example.com",
@@ -40,6 +45,7 @@
     "hasPhisicalAddress": true
   },
   {
+    "id": "6",
     "name": "Марія Савченко",
     "phone": "+380631234567",
     "email": "maria.savchenko@example.com",
@@ -48,6 +54,7 @@
     "hasPhisicalAddress": true
   },
   {
+    "id": "7",
     "name": "Дмитро Литвин",
     "phone": "+380501234568",
     "email": "dmytro.lytvyn@example.com",
@@ -56,6 +63,7 @@
     "hasPhisicalAddress": true
   },
   {
+    "id": "8",
     "name": "Катерина Грищенко",
     "phone": "+380671234568",
     "email": "kateryna.hryshchenko@example.com",
@@ -64,6 +72,7 @@
     "hasPhisicalAddress": true
   },
   {
+    "id": "9",
     "name": "Сергій Мельник",
     "phone": "+380931234568",
     "email": "serhii.melnyk@example.com",
@@ -72,6 +81,7 @@
     "hasPhisicalAddress": true
   },
   {
+    "id": "10",
     "name": "Юлія Зайцева",
     "phone": "+380661234568",
     "email": "yulia.zaitseva@example.com",
