@@ -30,3 +30,11 @@
     align-items: center;
     cursor: pointer;
 }
+.errorText {
+    font-size: 14px;
+    color: red;
+    background-color: antiquewhite;
+    border-radius: 5px;
+    display: inline-block;
+    padding: 5px;
+}

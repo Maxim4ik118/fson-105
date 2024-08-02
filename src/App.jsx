@@ -3,9 +3,10 @@ import { nanoid } from "nanoid";
 
 import Profile from "./components/Profile/Profile";
 
-import dataFromServer from "./db/profiles.json";
 import Section from "./components/Section/Section";
 import AddProfileForm from "./components/AddProfileForm/AddProfileForm";
+
+import dataFromServer from "./db/profiles.json";
 
 function App() {
   const [showUserList, setShowUserList] = useState(true);
