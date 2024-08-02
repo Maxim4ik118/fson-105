@@ -65,7 +65,8 @@ const AddProfileForm = ({ onAddProfile }) => {
       onSubmit={handleSubmit}
       validationSchema={ProfileValidationSchema}
     >
-      <Form className={css.form}>
+      {({ errors }) => (
+        <Form className={css.form}>
         <label className={css.label}>
           <span>Ім&apos;я користувача:</span>
           <Field
@@ -134,10 +135,12 @@ const AddProfileForm = ({ onAddProfile }) => {
           <span>Чи має профіль фізичну адресу?</span>
         </label>
 
-        <button className={css.submitBtn} type="submit">
+        <button disabled={Object.keys(errors).length > 0} className={css.submitBtn} type="submit">
           🤷‍♂️ Add New Profile
         </button>
       </Form>
+      )}
+      
     </Formik>
   );
 };
