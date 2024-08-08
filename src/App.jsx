@@ -10,7 +10,7 @@ import dataFromServer from "./db/profiles.json";
 
 function App() {
   const [showUserList, setShowUserList] = useState(true);
-  const [users, setUsers] = useState(dataFromServer); // [{...}, {...}]
+  const [users, setUsers] = useState(dataFromServer);
   const [filterValue, setFilterValue] = useState("");
 
   const handleClick = (userName) => {
@@ -27,12 +27,6 @@ function App() {
   };
 
   const onDeleteProfile = (profileId) => {
-    // [{ id: "1" }, { id: "2" }, { id: "3" }]
-    // [{ id: "1" }] -> "1" !== "3" -> true
-    // [{ id: "1" }, { id: "2" }] -> "2" !== "3" -> true
-    // [{ id: "1" }, { id: "2" }] -> "3" !== "3" -> false
-    // item.id !== profileId
-
     setUsers(users.filter((item) => item.id !== profileId));
   };
 
