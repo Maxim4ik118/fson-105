@@ -1,5 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import css from "./Modal.module.css";
+import { createPortal } from "react-dom";
+import AddProfileForm from "../AddProfileForm/AddProfileForm";
 
 /*
 Методи життєвого циклу.
@@ -49,10 +51,12 @@ import css from "./Modal.module.css";
   2. Синхронізація даних з localStorage, або з якимись сторонніми функціями.
 */
 
-const Modal = ({ onCloseModal }) => {
+const Modal = ({ onCloseModal, serverData }) => {
   const [counter, setCounter] = useState(() => {
-    return parseInt(localStorage.getItem("counterValue") ?? 0) ;
+    return parseInt(localStorage.getItem("counterValue") ?? 0);
   });
+  const buttonRef = useRef(null);
+  const secondButtonRef = useRef(null);
 
   useEffect(() => {
     localStorage.setItem("counterValue", counter);
@@ -78,7 +82,11 @@ const Modal = ({ onCloseModal }) => {
     }
   };
 
-  return (
+  const handleTestRef = () => {
+    secondButtonRef.current = "Hello Alibaba";
+  };
+
+  return createPortal(
     <div onClick={handleBackDropClick} className={css.backdrop}>
       <div className={css.modal}>
         <button
@@ -96,11 +104,21 @@ const Modal = ({ onCloseModal }) => {
           doloremque laboriosam tempore reprehenderit maiores nobis eligendi ad
           ipsum facere!
         </p>
-        <button type="button" onClick={() => setCounter(counter + 1)}>
+        <button ref={buttonRef} onClick={handleTestRef} type="button">
+          Click to focus on the second button
+        </button>
+        <button
+          ref={secondButtonRef}
+          type="button"
+          onClick={() => setCounter(counter + 1)}
+        >
           Click to increment counter: {counter}
         </button>
+
+       <p>Server Data: {serverData}</p>
       </div>
-    </div>
+    </div>,
+    document.getElementById("modal-root")
   );
 };
 

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { nanoid } from "nanoid";
 
 import Profile from "./components/Profile/Profile";
@@ -7,11 +7,22 @@ import Section from "./components/Section/Section";
 import AddProfileForm from "./components/AddProfileForm/AddProfileForm";
 
 import dataFromServer from "./db/profiles.json";
+import Modal from "./components/Modal/Modal";
 
 function App() {
   const [showUserList, setShowUserList] = useState(true);
   const [users, setUsers] = useState(dataFromServer);
   const [filterValue, setFilterValue] = useState("");
+  const [isOpenModal, setIsOpenModal] = useState(false);
+  const [serverDataForModal, setServerDataForModal] = useState(null);
+
+  const onOpenModal = (profileName) => {
+    setIsOpenModal(true);
+    setServerDataForModal(profileName);
+  };
+  const onCloseModal = () => {
+    setIsOpenModal(false);
+  };
 
   const handleClick = (userName) => {
     console.log("name: ", userName);
@@ -40,8 +51,12 @@ function App() {
     setShowUserList(!showUserList);
   };
 
-  const filteredProfiles = users.filter((profile) =>
-    profile.name.toLowerCase().includes(filterValue.toLowerCase())
+  const filteredProfiles = useMemo(
+    () =>
+      users.filter((profile) => {
+        return profile.name.toLowerCase().includes(filterValue.toLowerCase());
+      }),
+    [users, filterValue]
   );
 
   return (
@@ -53,6 +68,12 @@ function App() {
       <button type="button" onClick={toggleUserList}>
         Toggle User List
       </button>
+      {/* <button type="button" onClick={onOpenModal}>
+        Open Modal
+      </button> */}
+      {isOpenModal && (
+        <Modal onCloseModal={onCloseModal} serverData={serverDataForModal} />
+      )}
 
       <div>
         <h2>Search profile:</h2>
@@ -78,6 +99,7 @@ function App() {
                 hasPhisicalAddress={profile.hasPhisicalAddress}
                 onDeleteProfile={onDeleteProfile}
                 handleClick={handleClick}
+                onOpenModal={onOpenModal}
               />
             );
           })}

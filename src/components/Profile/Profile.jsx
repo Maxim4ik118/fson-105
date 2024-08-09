@@ -15,6 +15,7 @@ const Profile = ({
   hasPhisicalAddress,
   handleClick,
   onDeleteProfile,
+  onOpenModal,
 }) => {
 
   return (
@@ -39,7 +40,7 @@ const Profile = ({
       >
         Status: {status === "online" ? <RiRadioButtonLine /> : <CiWifiOff />}{" "}
       </p>
-      <button type="button" onClick={() => handleClick(name)}>
+      <button type="button" onClick={() => onOpenModal(name)}>
         Click to Alert
       </button>
     </div>

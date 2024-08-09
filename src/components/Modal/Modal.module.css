@@ -17,6 +17,8 @@
   max-width: 400px;
   width: 100%;
   min-height: 400px;
+  max-height: 80vh;
+  overflow-y: auto;
   background-color: white;
 }
 
