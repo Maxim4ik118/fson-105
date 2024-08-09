@@ -1,90 +1,62 @@
+import { useMemo, useState } from "react";
+import { nanoid } from "nanoid";
+
 import Profile from "./components/Profile/Profile";
 import Section from "./components/Section/Section";
 
-const dataFromServer = [
-  {
-    name: "Іван Петров",
-    phone: "+380501234567",
-    email: "ivan.petrov@example.com",
-    status: "online",
-    avatar: "https://example.com/avatars/ivan.jpg",
-    hasPhisicalAddress: false,
-  },
-  {
-    name: "Олена Коваль",
-    phone: "+380671234567",
-    email: "olena.koval@example.com",
-    status: "offline",
-    avatar: "https://example.com/avatars/olena.jpg",
-    hasPhisicalAddress: false,
-  },
-  {
-    name: "Максим Дмитренко",
-    phone: "+380931234567",
-    email: "maksym.dmytrenko@example.com",
-    status: "online",
-    avatar: "https://example.com/avatars/maksym.jpg",
-    hasPhisicalAddress: true,
-  },
-  {
-    name: "Анна Шевченко",
-    phone: "+380661234567",
-    email: "anna.shevchenko@example.com",
-    status: "offline",
-    avatar: "https://example.com/avatars/anna.jpg",
-    hasPhisicalAddress: true,
-  },
-  {
-    name: "Олександр Бондаренко",
-    phone: "+380991234567",
-    email: "oleksandr.bondarenko@example.com",
-    status: "online",
-    avatar: "https://example.com/avatars/oleksandr.jpg",
-    hasPhisicalAddress: true,
-  },
-  {
-    name: "Марія Савченко",
-    phone: "+380631234567",
-    email: "maria.savchenko@example.com",
-    status: "offline",
-    avatar: "https://example.com/avatars/maria.jpg",
-    hasPhisicalAddress: true,
-  },
-  {
-    name: "Дмитро Литвин",
-    phone: "+380501234568",
-    email: "dmytro.lytvyn@example.com",
-    status: "online",
-    avatar: "https://example.com/avatars/dmytro.jpg",
-    hasPhisicalAddress: true,
-  },
-  {
-    name: "Катерина Грищенко",
-    phone: "+380671234568",
-    email: "kateryna.hryshchenko@example.com",
-    status: "offline",
-    avatar: "https://example.com/avatars/kateryna.jpg",
-    hasPhisicalAddress: true,
-  },
-  {
-    name: "Сергій Мельник",
-    phone: "+380931234568",
-    email: "serhii.melnyk@example.com",
-    status: "online",
-    avatar: "https://example.com/avatars/serhii.jpg",
-    hasPhisicalAddress: true,
-  },
-  {
-    name: "Юлія Зайцева",
-    phone: "+380661234568",
-    email: "yulia.zaitseva@example.com",
-    status: "offline",
-    avatar: "https://example.com/avatars/yulia.jpg",
-    hasPhisicalAddress: false,
-  },
-];
+import dataFromServer from "./db/profiles.json";
+import Modal from "./components/Modal/Modal";
 
 function App() {
+  const [showUserList, setShowUserList] = useState(true);
+  const [users, setUsers] = useState(dataFromServer);
+  const [filterValue, setFilterValue] = useState("");
+  const [isOpenModal, setIsOpenModal] = useState(false);
+  const [serverDataForModal, setServerDataForModal] = useState(null);
+
+  const onOpenModal = (profileName) => {
+    setIsOpenModal(true);
+    setServerDataForModal(profileName);
+  };
+  const onCloseModal = () => {
+    setIsOpenModal(false);
+  };
+
+  const handleClick = (userName) => {
+    console.log("name: ", userName);
+  };
+
+  const onAddProfile = (profile) => {
+    const finalProfile = {
+      ...profile,
+      id: nanoid(),
+    };
+
+    setUsers([finalProfile, ...users]);
+  };
+
+  const onDeleteProfile = (profileId) => {
+    setUsers(users.filter((item) => item.id !== profileId));
+  };
+
+  const handleFilter = (event) => {
+    const value = event.target.value;
+
+    setFilterValue(value);
+  };
+
+  const toggleUserList = () => {
+    setShowUserList(!showUserList);
+  };
+
+  const filteredProfiles = useMemo(
+    () =>
+      users.filter((profile) => {
+        return profile.name.toLowerCase().includes(filterValue.toLowerCase());
+      }),
+    [users, filterValue]
+  );
+
   return (
     <div>
       <Section title="Profile list">
@@ -111,17 +83,15 @@ function App() {
         />
       </Section>
 
-      <Section>
-        <p>
-          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quaerat
-          atque unde omnis officia debitis. Eaque impedit quis, quos nobis
-          officia, debitis ab beatae a, consequatur voluptate animi quia illum
-          alias. Reiciendis, sed nesciunt voluptatem officiis obcaecati deserunt
-          nobis velit voluptas numquam reprehenderit! Impedit quo labore, esse
-          doloremque odio suscipit delectus.
-        </p>
-        <button>Lorem, ipsum.</button>
-      </Section>
+      <button type="button" onClick={toggleUserList}>
+        Toggle User List
+      </button>
+      {/* <button type="button" onClick={onOpenModal}>
+        Open Modal
+      </button> */}
+      {isOpenModal && (
+        <Modal onCloseModal={onCloseModal} serverData={serverDataForModal} />
+      )}
 
       <Section>
         {dataFromServer.map((profile) => {
@@ -138,13 +108,26 @@ function App() {
         })}
       </Section>
 
-      {/* <Profile
-        name="Max"
-        phone="123456789"
-        email="0i5k0@example.com"
-        status="online"
-        hasPhisicalAddress={false}
-      /> */}
+      {showUserList && (
+        <div>
+          {filteredProfiles.map((profile) => {
+            return (
+              <Profile
+                key={profile.id}
+                id={profile.id}
+                name={profile.name}
+                phone={profile.phone}
+                email={profile.email}
+                status={profile.status}
+                hasPhisicalAddress={profile.hasPhisicalAddress}
+                onDeleteProfile={onDeleteProfile}
+                handleClick={handleClick}
+                onOpenModal={onOpenModal}
+              />
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }
