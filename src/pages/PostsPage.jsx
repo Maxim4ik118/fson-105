@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 
-import Loader from "./components/Loader/Loader";
-import { requestAllPosts, requestPostsBySearchValue } from "./services/api";
-import SearchPostsForm from "./components/SearchPostsForm/SearchPostsForm";
+import Loader from "../components/Loader/Loader";
+import { requestAllPosts, requestPostsBySearchValue } from "../services/api";
+import SearchPostsForm from "../components/SearchPostsForm/SearchPostsForm";
+import { Link } from "react-router-dom";
 
-const AppWithHTTPS = () => {
+const PostsPage = () => {
   const [posts, setPosts] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null); // "Omg... Some error occured!"
@@ -61,12 +62,12 @@ const AppWithHTTPS = () => {
       {Array.isArray(posts) &&
         posts.map((post) => {
           return (
-            <article key={post.id}>
+            <Link to={`/posts/${post.id}`} key={post.id}>
               <h3>Title: {post.title}</h3>
               <p>Body: {post.body}</p>
               <p>Reviews: {JSON.stringify(post.reactions)}</p>
               <p>Tags: {post.tags.join(", ")}</p>
-            </article>
+            </Link>
           );
         })}
       {Array.isArray(posts) && posts.length === 0 && (
@@ -79,4 +80,4 @@ const AppWithHTTPS = () => {
   );
 };
 
-export default AppWithHTTPS;
+export default PostsPage;
