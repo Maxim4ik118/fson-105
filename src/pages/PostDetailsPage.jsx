@@ -1,5 +1,11 @@
-import { useEffect, useState } from "react";
-import { NavLink, Outlet, useParams } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import {
+  Link,
+  NavLink,
+  Outlet,
+  useLocation,
+  useParams,
+} from "react-router-dom";
 import { requestSinglePostData } from "../services/api";
 import Loader from "../components/Loader/Loader";
 
@@ -7,14 +13,16 @@ const PostDetailsPage = () => {
   const { postId } = useParams();
   const [postDetails, setPostDetails] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null); // "Omg... Some error occured!"
+  const [error, setError] = useState(null);
+  const location = useLocation();
+
+  const backLinkRef = useRef(location.state?.from ?? "/posts");
 
   useEffect(() => {
     const fetchPostDetails = async () => {
       try {
         setIsLoading(true);
         const data = await requestSinglePostData(postId);
-        console.log("data: ", data);
         setPostDetails(data);
       } catch (err) {
         setError(err.message);
@@ -28,6 +36,8 @@ const PostDetailsPage = () => {
 
   return (
     <div>
+      <Link to={backLinkRef.current}>⬅ Go back</Link>
+      <br />
       Post Details. ID: {postId}
       {postDetails !== null && (
         <div>

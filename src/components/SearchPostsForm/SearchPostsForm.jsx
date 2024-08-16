@@ -10,14 +10,13 @@ const SearchPostsValidationSchema = Yup.object().shape({
     .max(100, "Пошукове слово має бути меншим за 100 символів"),
 });
 
-const INITIAL_VALUES = {
-  searchTerm: "",
-};
+const SearchPostsForm = ({ onSearch, defaultSearchValue }) => {
+  const INITIAL_VALUES = {
+    searchTerm: defaultSearchValue || "",
+  };
 
-const SearchPostsForm = ({ onSearch }) => {
   const handleSubmit = (values) => {
-
-    onSearch(values.searchTerm)
+    onSearch(values.searchTerm);
   };
 
   return (
