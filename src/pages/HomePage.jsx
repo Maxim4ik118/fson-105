@@ -7,10 +7,17 @@ import dataFromServer from "../db/profiles.json";
 import AddProfileForm from "../components/AddProfileForm/AddProfileForm";
 import Profile from "../components/Profile/Profile";
 import Modal from "../components/Modal/Modal";
+import { useDispatch, useSelector } from "react-redux";
+import { addProfile, deleteProfile, showProfilesList } from "../redux/profiles/profilesReducer";
 
 const HomePage = () => {
-  const [showUserList, setShowUserList] = useState(true);
-  const [users, setUsers] = useState(dataFromServer);
+  // const [showUserList, setShowUserList] = useState(true);
+  // const [users, setUsers] = useState(dataFromServer);
+  const dispatch = useDispatch();
+
+  const users = useSelector((state) => state.profiles.profiles);
+  const showUserList = useSelector((state) => state.profiles.showProfilesList);
+
   const [filterValue, setFilterValue] = useState("");
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [serverDataForModal, setServerDataForModal] = useState(null);
@@ -33,11 +40,15 @@ const HomePage = () => {
       id: nanoid(),
     };
 
-    setUsers([finalProfile, ...users]);
+    dispatch(addProfile(finalProfile));
+    // dispatch({ type: "profiles/add", payload: finalProfile });
+    // setUsers([finalProfile, ...users]);
   };
 
   const onDeleteProfile = (profileId) => {
-    setUsers(users.filter((item) => item.id !== profileId));
+    dispatch(deleteProfile(profileId));
+    // dispatch({ type: "profiles/delete", payload: profileId });
+    // setUsers(users.filter((item) => item.id !== profileId));
   };
 
   const handleFilter = (event) => {
@@ -47,7 +58,9 @@ const HomePage = () => {
   };
 
   const toggleUserList = () => {
-    setShowUserList(!showUserList);
+    dispatch(showProfilesList(!showUserList))
+    // dispatch({ type: "profiles/showProfilesList", payload: !showUserList });
+    // setShowUserList(!showUserList);
   };
 
   const filteredProfiles = useMemo(

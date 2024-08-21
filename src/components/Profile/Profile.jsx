@@ -13,7 +13,6 @@ const Profile = ({
   email,
   status = "offline",
   hasPhisicalAddress,
-  handleClick,
   onDeleteProfile,
   onOpenModal,
 }) => {
