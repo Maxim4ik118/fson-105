@@ -1,16 +1,37 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { profilesReducer } from "./profiles/profilesReducer";
 
+import {
+  persistStore,
+  persistReducer,
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+} from "redux-persist";
+import storage from "redux-persist/lib/storage";
+
+import { profilesReducer } from "./profiles/profilesReducer";
+import { filterReducer } from "./filter/filterReducer";
+
+const profilesConfig = {
+  key: "profilesKey",
+  storage,
+ whitelist: ["profiles"], // blacklist: ["showProfilesList"]
+};
 
 export const store = configureStore({
-    reducer: {
-        profiles: profilesReducer
-    },
+  reducer: {
+    profiles: persistReducer(profilesConfig, profilesReducer),
+    filter: filterReducer,
+  },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }),
 });
 
-// state = {
-//  profiles: {
-//         profiles: [],
-//         showProfilesList: true,
-//  }
-//}
+export const persistor = persistStore(store);

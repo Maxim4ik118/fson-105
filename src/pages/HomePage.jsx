@@ -2,13 +2,17 @@ import { useMemo, useState } from "react";
 import { nanoid } from "nanoid";
 
 import Section from "../components/Section/Section";
-import dataFromServer from "../db/profiles.json";
 
 import AddProfileForm from "../components/AddProfileForm/AddProfileForm";
 import Profile from "../components/Profile/Profile";
 import Modal from "../components/Modal/Modal";
 import { useDispatch, useSelector } from "react-redux";
-import { addProfile, deleteProfile, showProfilesList } from "../redux/profiles/profilesReducer";
+import {
+  addProfile,
+  deleteProfile,
+  showProfilesList,
+} from "../redux/profiles/profilesReducer";
+import { setFilterValue } from "../redux/filter/filterReducer";
 
 const HomePage = () => {
   // const [showUserList, setShowUserList] = useState(true);
@@ -17,8 +21,9 @@ const HomePage = () => {
 
   const users = useSelector((state) => state.profiles.profiles);
   const showUserList = useSelector((state) => state.profiles.showProfilesList);
+  const filterValue = useSelector((state) => state.filter.filterValue);
 
-  const [filterValue, setFilterValue] = useState("");
+  // const [filterValue, setFilterValue] = useState("");
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [serverDataForModal, setServerDataForModal] = useState(null);
 
@@ -42,25 +47,26 @@ const HomePage = () => {
 
     dispatch(addProfile(finalProfile));
     // dispatch({ type: "profiles/add", payload: finalProfile });
-    // setUsers([finalProfile, ...users]);
   };
 
   const onDeleteProfile = (profileId) => {
-    dispatch(deleteProfile(profileId));
-    // dispatch({ type: "profiles/delete", payload: profileId });
-    // setUsers(users.filter((item) => item.id !== profileId));
+    const action = deleteProfile(profileId);
+
+    dispatch(action);
   };
 
   const handleFilter = (event) => {
     const value = event.target.value;
 
-    setFilterValue(value);
+    const action = setFilterValue(value);
+
+    dispatch(action);
   };
 
   const toggleUserList = () => {
-    dispatch(showProfilesList(!showUserList))
-    // dispatch({ type: "profiles/showProfilesList", payload: !showUserList });
-    // setShowUserList(!showUserList);
+    const action = showProfilesList(!showUserList);
+
+    dispatch(action);
   };
 
   const filteredProfiles = useMemo(
