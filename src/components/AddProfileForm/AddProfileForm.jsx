@@ -28,9 +28,8 @@ const ProfileValidationSchema = Yup.object().shape({
   profileEmail: Yup.string()
     .email("Електронна адреса має бути валідного формату")
     .required("Електронна адреса є обов'язковою"),
-  profileStatus: Yup.string()
-    .oneOf(["online", "offline"])
-    .required("Статус є обов'язковим для вибору"),
+  // profileStatus: Yup.bool()
+  //   .required("Статус є обов'язковим для вибору"),
   profilePhisicalAddress: Yup.bool(),
 });
 
@@ -38,7 +37,7 @@ const INITIAL_VALUES = {
   profileName: "",
   profileNumber: "",
   profileEmail: "",
-  profileStatus: "",
+  // profileStatus: false,
   profilePhisicalAddress: false,
 };
 
@@ -49,7 +48,7 @@ const AddProfileForm = ({ onAddProfile }) => {
       phone: values.profileNumber,
       email: values.profileEmail,
       hasPhisicalAddress: values.profilePhisicalAddress,
-      status: values.profileStatus,
+      isOnline: true,
       avatar: "https://example.com/avatars/ivan.jpg",
     };
 
@@ -112,23 +111,23 @@ const AddProfileForm = ({ onAddProfile }) => {
           />
         </label>
 
-        <p>Статус активності:</p>
-        <div className={css.label}>
+        {/* <p>Статус активності:</p> */}
+        {/* <div className={css.label}>
           <label className={css.statusWrapper}>
             Онлайн:{" "}
-            <Field type="radio" name="profileStatus" value="online" />
+            <Field type="radio" name="profileStatus" value={true} />
           </label>
 
           <label className={css.statusWrapper}>
             Офлайн:{" "}
-            <Field type="radio" name="profileStatus" value="offline" />
+            <Field type="radio" name="profileStatus" value={false} />
           </label>
           <ErrorMessage
             className={css.errorText}
             name="profileStatus"
             component="span"
           />
-        </div>
+        </div> */}
 
         <label className={css.checkboxLabel}>
           <Field type="checkbox" name="profilePhisicalAddress" />

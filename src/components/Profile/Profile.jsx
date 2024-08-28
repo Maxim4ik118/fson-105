@@ -11,7 +11,7 @@ const Profile = ({
   name,
   phone,
   email,
-  status = "offline",
+  isOnline = false,
   hasPhisicalAddress,
   onDeleteProfile,
   onOpenModal,
@@ -33,11 +33,11 @@ const Profile = ({
       <p className={css.fieldRow}>Email: {email}</p>
       <p
         className={clsx(css.fieldRow, {
-          [css.online]: status === "online",
-          [css.offline]: status === "offline",
+          [css.online]: isOnline,
+          [css.offline]: !isOnline,
         })}
       >
-        Status: {status === "online" ? <RiRadioButtonLine /> : <CiWifiOff />}{" "}
+        Status: {isOnline ? <RiRadioButtonLine /> : <CiWifiOff />}{" "}
       </p>
       <button type="button" onClick={() => onOpenModal(name)}>
         Click to Alert

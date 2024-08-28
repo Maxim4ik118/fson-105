@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { nanoid } from "nanoid";
 
 import Section from "../components/Section/Section";
@@ -9,7 +9,9 @@ import Modal from "../components/Modal/Modal";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addProfile,
-  deleteProfile,
+  apiAddProfile,
+  apiDeleteProfile,
+  apiGetAllProfiles,
   showProfilesList,
 } from "../redux/profiles/profilesReducer";
 import { setFilterValue } from "../redux/filter/filterReducer";
@@ -27,6 +29,10 @@ const HomePage = () => {
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [serverDataForModal, setServerDataForModal] = useState(null);
 
+  useEffect(() => {
+    dispatch(apiGetAllProfiles());
+  }, [dispatch]);
+
   const onOpenModal = (profileName) => {
     setIsOpenModal(true);
     setServerDataForModal(profileName);
@@ -40,19 +46,13 @@ const HomePage = () => {
   };
 
   const onAddProfile = (profile) => {
-    const finalProfile = {
-      ...profile,
-      id: nanoid(),
-    };
-
-    dispatch(addProfile(finalProfile));
-    // dispatch({ type: "profiles/add", payload: finalProfile });
+    dispatch(apiAddProfile(profile));
   };
 
   const onDeleteProfile = (profileId) => {
-    const action = deleteProfile(profileId);
+    const thunk = apiDeleteProfile(profileId);
 
-    dispatch(action);
+    dispatch(thunk);
   };
 
   const handleFilter = (event) => {
@@ -113,7 +113,7 @@ const HomePage = () => {
                 name={profile.name}
                 phone={profile.phone}
                 email={profile.email}
-                status={profile.status}
+                isOnline={profile.isOnline}
                 hasPhisicalAddress={profile.hasPhisicalAddress}
                 onDeleteProfile={onDeleteProfile}
                 handleClick={handleClick}
