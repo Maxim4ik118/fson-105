@@ -14,6 +14,7 @@ import { configureStore } from "@reduxjs/toolkit";
 
 import { profilesReducer } from "./profiles/profilesReducer";
 import { filterReducer } from "./filter/filterReducer";
+import { postsReducer } from "./posts/posts.slice";
 
 // const profilesConfig = {
 //   key: "profilesKey",
@@ -25,6 +26,7 @@ export const store = configureStore({
   reducer: {
     profiles: profilesReducer,
     filter: filterReducer,
+    posts: postsReducer
   },
   // middleware: (getDefaultMiddleware) =>
   //   getDefaultMiddleware({

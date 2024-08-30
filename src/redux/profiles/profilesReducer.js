@@ -20,7 +20,7 @@ export const apiDeleteProfile = createAsyncThunk(
   "profiles/delete",
   async (profileId, thunkApi) => {
     try {
-      const { data } = await axios.delete(// :profileId
+      const { data } = await axios.delete(
         `https://66cf5aa8901aab248421e5f8.mockapi.io/api/v1/profile/${profileId}`
       );
 
@@ -85,23 +85,25 @@ const profileSlice = createSlice({
         state.error = null;
       })
       .addCase(apiDeleteProfile.fulfilled, (state, action) => {
+        // data -> action.payload
         state.isLoading = false;
         state.profiles = state.profiles.filter(
           (profile) => profile.id !== action.payload.id
         );
       })
       .addCase(apiDeleteProfile.rejected, (state, action) => {
+        // error.message -> action.payload
         state.isLoading = false;
         state.error = action.payload;
       })
-      
+
       .addCase(apiAddProfile.pending, (state) => {
         state.isLoading = true;
         state.error = null;
       })
       .addCase(apiAddProfile.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.profiles.push(action.payload)
+        state.profiles.push(action.payload);
       })
       .addCase(apiAddProfile.rejected, (state, action) => {
         state.isLoading = false;

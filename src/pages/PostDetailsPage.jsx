@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Link,
   NavLink,
@@ -6,33 +7,31 @@ import {
   useLocation,
   useParams,
 } from "react-router-dom";
-import { requestSinglePostData } from "../services/api";
+
 import Loader from "../components/Loader/Loader";
+import {
+  selectPostsError,
+  selectPostsIsLoading,
+  selectPostsPostDetails,
+} from "../redux/posts/posts.selectors";
+import { apiGetPostDetails } from "../redux/posts/posts.operations";
 
 const PostDetailsPage = () => {
   const { postId } = useParams();
-  const [postDetails, setPostDetails] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const dispatch = useDispatch();
   const location = useLocation();
+
+  const postDetails = useSelector(selectPostsPostDetails);
+  const isLoading = useSelector(selectPostsIsLoading);
+  const error = useSelector(selectPostsError);
 
   const backLinkRef = useRef(location.state?.from ?? "/posts");
 
   useEffect(() => {
-    const fetchPostDetails = async () => {
-      try {
-        setIsLoading(true);
-        const data = await requestSinglePostData(postId);
-        setPostDetails(data);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+    if (!postId) return;
 
-    fetchPostDetails();
-  }, [postId]);
+    dispatch(apiGetPostDetails(postId));
+  }, [postId, dispatch]);
 
   return (
     <div>

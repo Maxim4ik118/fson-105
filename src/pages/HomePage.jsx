@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from "react";
-import { nanoid } from "nanoid";
 
 import Section from "../components/Section/Section";
 
@@ -8,24 +7,22 @@ import Profile from "../components/Profile/Profile";
 import Modal from "../components/Modal/Modal";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  addProfile,
   apiAddProfile,
   apiDeleteProfile,
   apiGetAllProfiles,
   showProfilesList,
 } from "../redux/profiles/profilesReducer";
 import { setFilterValue } from "../redux/filter/filterReducer";
+import { selectFilteredProfiles, selectShowUserList } from "../redux/profiles/profiles.selectors";
+import { selectFilter } from "../redux/filter/filter.selectors";
 
 const HomePage = () => {
-  // const [showUserList, setShowUserList] = useState(true);
-  // const [users, setUsers] = useState(dataFromServer);
   const dispatch = useDispatch();
+  // const users = useSelector(selectProfiles);
+  const showUserList = useSelector(selectShowUserList);
+  const filterValue = useSelector(selectFilter);
+  const filteredProfiles = useSelector(selectFilteredProfiles)
 
-  const users = useSelector((state) => state.profiles.profiles);
-  const showUserList = useSelector((state) => state.profiles.showProfilesList);
-  const filterValue = useSelector((state) => state.filter.filterValue);
-
-  // const [filterValue, setFilterValue] = useState("");
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [serverDataForModal, setServerDataForModal] = useState(null);
 
@@ -69,13 +66,13 @@ const HomePage = () => {
     dispatch(action);
   };
 
-  const filteredProfiles = useMemo(
-    () =>
-      users.filter((profile) => {
-        return profile.name.toLowerCase().includes(filterValue.toLowerCase());
-      }),
-    [users, filterValue]
-  );
+  // const filteredProfiles = useMemo(
+  //   () =>
+  //     users.filter((profile) => {
+  //       return profile.name.toLowerCase().includes(filterValue.toLowerCase());
+  //     }),
+  //   [users, filterValue]
+  // );
 
   return (
     <div>
