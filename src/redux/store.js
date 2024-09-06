@@ -16,6 +16,7 @@ import { profilesReducer } from "./profiles/profilesReducer";
 import { filterReducer } from "./filter/filterReducer";
 import { postsReducer } from "./posts/posts.slice";
 import { authReducer } from "./auth/slice";
+import { contactsReducer } from "./contacts/slice";
 
 const authConfig = {
   key: "auth",
@@ -29,6 +30,7 @@ export const store = configureStore({
     filter: filterReducer,
     posts: postsReducer,
     auth: persistReducer(authConfig, authReducer),
+    contacts: contactsReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

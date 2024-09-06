@@ -10,7 +10,9 @@ import {
   selectAuthIsRefreshing,
   selectAuthUser,
 } from "./redux/auth/selectors";
-import { apiRefreshUser } from "./redux/auth/operations";
+import { apiLogout, apiRefreshUser } from "./redux/auth/operations";
+import { RestrictedRoute } from "./components/RestrictedRoute";
+import { PrivateRoute } from "./components/PrivateRoute";
 
 // import HomePage from "./pages/HomePage";
 // import PostsPage from "./pages/PostsPage";
@@ -40,6 +42,10 @@ function App() {
   useEffect(() => {
     dispatch(apiRefreshUser());
   }, [dispatch]);
+
+  const onLogout = () => {
+    dispatch(apiLogout());
+  };
 
   if (isRefreshing) return <p>User is refreshing, please wait</p>;
 
@@ -83,6 +89,9 @@ function App() {
                 <p>Hello, {user.name}!</p>
                 <p>Email: {user.email}</p>
               </div>
+              <button type="button" onClick={onLogout}>
+                Logout
+              </button>
             </>
           ) : (
             <>
@@ -110,12 +119,30 @@ function App() {
         <Suspense fallback={<Loader />}>
           <Routes>
             <Route path="/" element={<HomePage />} />
-            <Route path="/register" element={<RegisterPage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/contacts" element={<ContactsPage />} />
-            <Route path="/posts" element={<PostsPage />} />
-            <Route path="/context-example" element={<ContextExamplePage />} />
-            <Route path="/posts/:postId" element={<PostDetailsPage />}>
+            <Route
+              path="/register"
+              element={<RestrictedRoute component={<RegisterPage />} />}
+            />
+            <Route
+              path="/login"
+              element={<RestrictedRoute component={<LoginPage />} />}
+            />
+            <Route
+              path="/contacts"
+              element={<PrivateRoute component={<ContactsPage />} />}
+            />
+            <Route
+              path="/posts"
+              element={<PrivateRoute component={<PostsPage />} />}
+            />
+            <Route
+              path="/context-example"
+              element={<PrivateRoute component={<ContextExamplePage />} />}
+            />
+            <Route
+              path="/posts/:postId"
+              element={<PrivateRoute component={<PostDetailsPage />} />}
+            >
               <Route path="comments" element={<PostComments />} />
               <Route path="reviews" element={<PostReviews />} />
             </Route>

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 
 import Section from "../components/Section/Section";
 
@@ -13,7 +13,10 @@ import {
   showProfilesList,
 } from "../redux/profiles/profilesReducer";
 import { setFilterValue } from "../redux/filter/filterReducer";
-import { selectFilteredProfiles, selectShowUserList } from "../redux/profiles/profiles.selectors";
+import {
+  selectFilteredProfiles,
+  selectShowUserList,
+} from "../redux/profiles/profiles.selectors";
 import { selectFilter } from "../redux/filter/filter.selectors";
 
 const HomePage = () => {
@@ -21,7 +24,7 @@ const HomePage = () => {
   // const users = useSelector(selectProfiles);
   const showUserList = useSelector(selectShowUserList);
   const filterValue = useSelector(selectFilter);
-  const filteredProfiles = useSelector(selectFilteredProfiles)
+  const filteredProfiles = useSelector(selectFilteredProfiles);
 
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [serverDataForModal, setServerDataForModal] = useState(null);
